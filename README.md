@@ -104,7 +104,7 @@ People may want to reach out to you for various reasons, ranging from DCMA take 
 
 ## License
 
-This project is licensed under Valley Behavioral Health. The license should be in a separate file called LICENSE, so don't explain it in detail within your documentation. Also, don't forget to specify licenses of third-party libraries and programs you use.
+This project is licensed under Valley Behavioral Health. 
 
 Sometimes including a Table of Contents (TOC) at the beginning of the documentation makes sense, especially when your README file is more than a few paragraphs. If you think that the README file has grown too large, put some of the more detailed parts, such as installation or configuration sections, into their own files.
 
