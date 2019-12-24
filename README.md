@@ -19,7 +19,10 @@ Give instructions on how to participate in your project patches.
 Explain which communication channels are available to request help. Communication channels with a proven track record are mailing lists, IRC channels, and forums. Also be sure to tell your more experienced users how and where to submit bugs or feature requests, possibly turning them into project participants.
 
 ## Installation
-This project is built on two tiers:  Front End: Medical Administration Record
+This project is built on two tiers:  
+
+                                     
+                                     Front End: Medical Administration Record
                                               1. MobileApp directory: MAR Distribution Section.
                                               2. Pages directory: MAR Reciever Section.
                                      
