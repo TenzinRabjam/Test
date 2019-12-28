@@ -3,24 +3,29 @@ README v1.0 / 19 DECEMBER 2019
 # Medical Administration Record
 
 ## Introduction
+Medical Administration Record's purpose is to store the medication records for the residential clients at Valley Behavioral Health. It is using a .NET API and ASP.NET Page with a simple API tool named SWAGGER.  Front     
+
+
 
 Give your users an overview of the purpose and function of your project in a paragraph or two (at most). Because sometimes a picture is worth a thousand words, include screenshots when appropriate.
 
-## Usage
+## Changes
+Mar User tracking records in following pages:
+  Client Page(line:) 
 
-Provide a short code snippet (if applicable), or short usage instructions
+## Usage
+Medication recieved from the page: 
+
+Medication distributed:
 
 ## Contributing
-
-Give instructions on how to participate in your project patches.
+Cerenimbus.inc
 
 ## Help
-
 Explain which communication channels are available to request help. Communication channels with a proven track record are mailing lists, IRC channels, and forums. Also be sure to tell your more experienced users how and where to submit bugs or feature requests, possibly turning them into project participants.
 
 ## Installation
 This project is built on two tiers:  
-
                                      
                                      Front End: Medical Administration Record
                                               1. MobileApp directory: MAR Distribution Section.
