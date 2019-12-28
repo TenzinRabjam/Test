@@ -9,9 +9,21 @@ Medical Administration Record's purpose is to store the medication records for t
 
 Give your users an overview of the purpose and function of your project in a paragraph or two (at most). Because sometimes a picture is worth a thousand words, include screenshots when appropriate.
 
+
 ## Changes
 Mar User tracking records in following pages:
-  Client Page(line:) 
+  
+  Front End: Medical Administration Record
+   
+    MobileApp directory: MAR Distribution Section
+      Index Page(line:) 
+      
+    Pages directory: MAR Reciever Section.
+      Index Page(line:) 
+    
+  Back End: Mar API
+    
+    
 
 ## Usage
 Medication recieved from the page: 
