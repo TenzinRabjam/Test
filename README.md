@@ -11,20 +11,88 @@ Give your users an overview of the purpose and function of your project in a par
 
 
 ## Changes
+Keyword: User - Person accessing MAR, Client: Clients at Valley Residential
+Note: 1. All the headers are the cshtml pages in this project(13 pages - 6 in Distribution and 7 in Reciever)
+      2. We have added few functionalities storing the log with no deletions at all in the entire project
+      3. Recording is taking place in Custom_MarUserLog table in ValleySmartCareProd Database.
+      4. In the MAR Backend, only user controller has been changed and every other controllers are unchanged.
+      
 Mar User tracking records in following pages:
   
   Front End: Medical Administration Record
    
     MobileApp directory: MAR Distribution Section
-      Index Page(line:) 
+      
+      Choose-Distribution-Date:
+          (line 75): CSS Changes for making a uniform look for the login page as the reciever login page.
+      
+      Client:
+          (line 433 - 449): Recording the user log, if they viewed the distributed client lists.
+          (line 480 - 497): Recording the user log, if they viewed the undistributed client lists.
+          (line 588 - 605): Recording the user log, if they viewed the all the client lists.
+          (line 954 - 971): Recording the user activity, and client ID, when they use the deliver ordered page.
+          (line 1057 - 1074): Recording the user activity, if they view deliver PRN page for a specific client.
+          (line 1098 - 1112): Recording the user state when they logout and also clearing the session.
+          
+      Deliver-Ordered:
+          (line 284 - 302): Recording the user log and client ID, when they have submitted orders.
+      
+      Deliver-PRN:
+          (line 278 - 296): Recording the user log and client ID, when they have submitted PRN.
+          
+      Display-Clientlist:
+          (line 73): CSS changes for padding to make the page broad.
+          (line 83- 85): CSS changes for styling the margin and screen-content.
+          
+      Index:
+          (line 286 - 312): Setting the user's current session, and recording their log. 
       
     Pages directory: MAR Reciever Section.
-      Index Page(line:) 
+      
+      Medication-Add-Medication: 
+          (line 486 - 506): Recording the user log, when they have changed multiple client's medication.
+          
+      Medication-Delivery:
+          (line 171 - 187): Recording the user name, and using the password as a page name holder.
+          (line 204 - 218): Recording the logging out action of the user.
+      
+      Medication-Reciept-Verification-login:
+          (line 100 - 102): CSS Changes for adding and submitting medication.
+      
+      Medication-Recieved-Per-Client:
+          (line 509 - 526): Recording the user log and client's ID and program, when they delete a client's medication.
+      
+      Medication-Remove-Medication:
+          (line 381 - 401): Recording the whole detail of a client if the user viewed the remove medication page.
+      
+      Medication-Report:
+          none-changed
+      
+      Index:
+          (line 142 - 158): Setting the user's current session, and recording their log.        
+    
     
   Back End: Mar API
-    
-    
-
+  
+    Controllers directory: UserController      
+       (line 134 - 232): Added for Recording each user activity with 13 routings(5 in Reciever and 8 in Distribution Section):
+          MAR Distribution Section      
+              1. LoginUserDistributor
+              2. LogoutUserDistributor
+              3. ClientDistributor
+              4. ViewClientListDistributor
+              5. DeliverOrderedDistributor
+              6. DeliverPrnDistributor
+              7. SubmitDeliverOrderedDistributor
+              8. SubmitDeliverPrnDistributor
+        
+         MAR Reciever Section:
+              1. LoginUserReciever
+              2. LogoutUserReciever
+              3. MedicationPerClientUserReciever
+              4. RemoveClientUserReciever
+              5. ChangedClientUserReciever
+              
 ## Usage
 Medication recieved from the page: 
 
