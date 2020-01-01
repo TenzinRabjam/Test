@@ -3,14 +3,12 @@ README v1.0 / 19 DECEMBER 2019
 # Medical Administration Record
 
 ## Introduction
-Medical Administration Record's purpose is to store the medication records for the residential clients at Valley Behavioral Health. It is using a .NET API and ASP.NET Page with a simple API tool named SWAGGER.  Front     
 
-
-
-Give your users an overview of the purpose and function of your project in a paragraph or two (at most). Because sometimes a picture is worth a thousand words, include screenshots when appropriate.
+Medical Administration Record's purpose is to store the medication records for the residential clients at Valley Behavioral Health. It is using a .NET API and ASP.NET Page with a simple API tool named SWAGGER IO.        
 
 
 ## Changes
+
 Keyword: User - Person accessing MAR, Client: Clients at Valley Residential
 Note: 1. All the headers are the cshtml pages in this project(13 pages - 6 in Distribution and 7 in Reciever)
       2. We have added few functionalities storing the log with no deletions at all in the entire project
@@ -94,17 +92,22 @@ Mar User tracking records in following pages:
               5. ChangedClientUserReciever
               
 ## Usage
-Medication recieved from the page: 
 
-Medication distributed:
+Medication recieved by Valley Users, more specifically by Nurse Robin currently at Valley CORE 1 Residential. 
+
+Medication distributed to the Clients with their initials as the signature.
 
 ## Contributing
+
+Valley Behavioral Health
 Cerenimbus.inc
 
 ## Help
-Explain which communication channels are available to request help. Communication channels with a proven track record are mailing lists, IRC channels, and forums. Also be sure to tell your more experienced users how and where to submit bugs or feature requests, possibly turning them into project participants.
+
+Communication channels are available to request help by Tenzin, .Net Developer at Valley Behavioral Health. Communication channels with a proven track record are outlook mailing lists, IRC, and .net forums. Users can submit bugs or feature requests on slack to me(Slack username: tenzinr).
 
 ## Installation
+
 This project is built on two tiers:  
                                      
                                      Front End: Medical Administration Record
@@ -172,29 +175,36 @@ This project is built on two tiers:
        
 ### Requirements
 
-List anything your project requires in order to work as expected.
+Visual Studio 2019 Enterprise
+Nuget: Entity Core Framework 
+Swagger IO API
+SSMS: ValleyCareProd DB
 
 ### Installation
 
-Describe how to install your program. Be precise and give examples. Don't assume your users know how to clone from my github repo. Keep in mind that some of your users may be completely unskilled in system administration or software development.
+1. There are two projects on the server: VBHServer01 via Cisco AnyConnect or Remote Desktop
+2. In the users section, pick TENZINR or Kirby.Glad
+3. You will find, three projects named MedicationAdministrationRecord, MarAPI and MarAPIDebug
+      3a. MedicationAdministrationRecord is the frontend for the project
+      3b.  MarAPI and MarAPIDebug are the backend where MarAPI is in production and MarAPIDebug is in debug mode.
+4. You would need to enable COR if there is ECor issue.
 
 ### Configuration
 
-After having installed the software, the user may need to configure it. List configuration options and explain how and where to set them.
+1. Run both the projects in ADMIN Mode.
+2. Server path should be configured with the default user pool.
 
 ## Credits
 
-Sometimes also called Authors, this is the list of project contributors.
+Kirby Glad at Cerenimbus.inc
 
 ## Contact
 
-People may want to reach out to you for various reasons, ranging from DCMA take down notices to questions about how to donate to your project. Provide contact information, such as an email address, and keep in mind that some countries may require certain information by law, such as a full postal address, website URL, and company name.
+Mail: tenzinr@valleycares.com
+Slack username: tenzinr
+Phone: 3854446917
 
 ## License
 
 This project is licensed under Valley Behavioral Health. 
 
-Sometimes including a Table of Contents (TOC) at the beginning of the documentation makes sense, especially when your README file is more than a few paragraphs. If you think that the README file has grown too large, put some of the more detailed parts, such as installation or configuration sections, into their own files.
-
-## Conclusion
-Writing your first documentation doesn't seem as hard or or time-consuming as you initially thought, does it? Now you have a starting point on which you can build. Don't forget to update your README to keep it current with your project's development and new releases.
