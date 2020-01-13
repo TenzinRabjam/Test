@@ -6,6 +6,7 @@ README v1.0 / 19 DECEMBER 2019
 
 Medical Administration Record's purpose is to store the medication records for the residential clients at Valley Behavioral Health. It is using a .NET API and ASP.NET Page with a simple API tool named SWAGGER IO.        
 
+Full modified rundown of API: http://localhost:57121/swagger/ui/index  on VBHServer01 server
 
 ## Changes
 
@@ -96,6 +97,14 @@ Mar User tracking records in following pages:
 Medication recieved by Valley Users, more specifically by Nurse Robin currently at Valley CORE 1 Residential. 
 
 Medication distributed to the Clients with their initials as the signature.
+
+## Design Pattern
+
+Singleton with usage of both Razor and Model-View-Controller pages.
+
+## Unit Testing
+
+It is using Swagger.IO tester which is inbuilt in SwaggerAPI 
 
 ## Contributing
 
