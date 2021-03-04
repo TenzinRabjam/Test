@@ -1,0 +1,343 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD>
+<META NAME="description" content="Fox and dogs is a PC-Game written in HTML and JavaScript">
+<META NAME="author" content="Lutz Tautenhahn">
+<META NAME="keywords" content="Game, Fox and dogs, JavaScript">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<title>Fox and dogs</title>
+<script language="JavaScript">
+var i, j, N_Sel, I_Sel, J_Sel, IsOver, Size=8, Start, Start0=0, IsRotated=true;
+var PieceX=new Array(5), PieceY=new Array(5);
+
+IsPlayer=new Array(2);
+IsPlayer[0]=true;
+IsPlayer[1]=false;
+Fld = new Array(Size);
+for (i=0; i < Size; i++)
+{ Fld[i]=new Array(Size);
+}
+
+Pic= new Array(5);
+for (i=0; i<5; i++)
+{ Pic[i] = new Image();
+  Pic[i].src = "foxanddogs"+i+".gif";
+}
+
+function SetStart(ss)
+{ Start0=ss;
+}
+
+function SetPlayer(ii,nn)
+{ IsPlayer[ii]=nn;
+}
+
+function Init()
+{ var ii, jj;
+  Start=Start0;
+  PieceX[0]=Size/2-1; PieceY[0]=0; //Fox
+  for (ii=0; ii < 4; ii++) //Dogs
+  { PieceX[ii+1]=2*ii;
+    PieceY[ii+1]=Size-1;
+  }
+  for (ii=0; ii < Size; ii++)
+  { for (jj=0; jj < Size; jj++)
+      Fld[ii][jj]=-1;
+  }
+  Fld[PieceX[0]][PieceY[0]]=0;
+  for (ii=1; ii <= 4; ii++)
+    Fld[PieceX[ii]][PieceY[ii]]=1;
+  N_Sel=-1;
+  IsOver=0;
+  MoveCount=0;
+  MaxMoveCount=0;
+  N_Sel=-1;
+  RefreshScreen();
+}
+
+function Timer()
+{ if (IsOver) return;
+  var mmove=(MoveCount+Start)%2;
+  if (IsPlayer[mmove]) return;
+  GetBestMove(mmove,4, 4);
+  if (mmove==0) //Fox
+  { Fld[I_Sel][J_Sel]=0;
+    Fld[PieceX[0]][PieceY[0]]=-1;
+    RefreshPic(I_Sel, J_Sel);
+    RefreshPic(PieceX[0],PieceY[0]);
+    PieceX[0]=I_Sel;
+    PieceY[0]=J_Sel;
+    N_Sel=-1;
+    MoveCount++;
+    OverTest(0, true);
+  }
+  else //Dogs
+  { Fld[I_Sel][J_Sel]=1;
+    Fld[PieceX[N_Sel]][PieceY[N_Sel]]=-1;
+    RefreshPic(I_Sel, J_Sel);
+    RefreshPic(PieceX[N_Sel],PieceY[N_Sel]);
+    PieceX[N_Sel]=I_Sel;
+    PieceY[N_Sel]=J_Sel;
+    N_Sel=-1;
+    MoveCount++;
+    OverTest(1, true);
+  }
+}
+
+function Clicked(ii, jj)
+{ var kk, nn, mm, mmove=(MoveCount+Start)%2;
+  if (IsOver>0) return;
+  if (! IsPlayer[mmove]) return;
+  if (IsRotated) { nn=Size-1-ii; mm=Size-1-jj; }
+  else { nn=ii; mm=jj; }
+  if (N_Sel>=0)
+  { if (N_Sel==0) Fld[PieceX[N_Sel]][PieceY[N_Sel]]=0;
+    else Fld[PieceX[N_Sel]][PieceY[N_Sel]]=1;
+    RefreshPic(PieceX[N_Sel],PieceY[N_Sel]);
+  }
+  for (kk=mmove; kk<=4*mmove; kk++)
+  { if ((PieceX[kk]==nn)&&(PieceY[kk]==mm)) 
+    { N_Sel=kk; 
+      if (N_Sel>=0)
+      { if (N_Sel==0) Fld[PieceX[N_Sel]][PieceY[N_Sel]]=2;
+        else Fld[PieceX[N_Sel]][PieceY[N_Sel]]=3;
+        RefreshPic(PieceX[N_Sel],PieceY[N_Sel]);
+      }
+      return; 
+    }
+  }
+  if (mmove==0) //Fox
+  { if ((Math.abs(PieceX[0]-nn)==1)&&(Math.abs(PieceY[0]-mm)==1)&&(Fld[nn][mm]<0))
+    { Fld[nn][mm]=0;
+      Fld[PieceX[0]][PieceY[0]]=-1;
+      RefreshPic(nn, mm);
+      RefreshPic(PieceX[0],PieceY[0]);
+      PieceX[0]=nn;
+      PieceY[0]=mm;
+      N_Sel=-1;
+      MoveCount++;
+      OverTest(0, true);
+    }
+  }
+  else //Dogs
+  { if (N_Sel<0) return;
+    if ((Math.abs(PieceX[N_Sel]-nn)==1)&&(PieceY[N_Sel]-mm==1)&&(Fld[nn][mm]<0))
+    { Fld[nn][mm]=1;
+      Fld[PieceX[N_Sel]][PieceY[N_Sel]]=-1;
+      RefreshPic(nn, mm);
+      RefreshPic(PieceX[N_Sel],PieceY[N_Sel]);
+      PieceX[N_Sel]=nn;
+      PieceY[N_Sel]=mm;
+      N_Sel=-1;
+      MoveCount++;
+      OverTest(1, true);
+    }
+  }
+}
+
+function GetBestMove(mm, ll, kk)
+{ var dd_i, dd_j, nn, vv, ii_best, jj_best, nn_best, vv_best=-10000, mm1=1-mm, ll1=ll-1;
+  var xx_min, xx_max, yy_min, yy_max;
+  for (nn=mm; nn<=4*mm; nn++)
+  { for (dd_i=-1; dd_i<=1; dd_i+=2)
+    { for (dd_j=-1; dd_j<=1; dd_j+=2)
+      { if ((mm==0)||(dd_j<0))
+        { if (GetFld(PieceX[nn]+dd_i,PieceY[nn]+dd_j)==-1)
+          { Fld[PieceX[nn]][PieceY[nn]]=-1;
+            PieceX[nn]+=dd_i;
+            PieceY[nn]+=dd_j;
+            Fld[PieceX[nn]][PieceY[nn]]=mm;
+            if(OverTest(mm,false))
+            { N_Sel=nn;
+              I_Sel=PieceX[nn];
+              J_Sel=PieceY[nn];
+              Fld[PieceX[nn]][PieceY[nn]]=-1;
+              PieceX[nn]-=dd_i;
+              PieceY[nn]-=dd_j;
+              Fld[PieceX[nn]][PieceY[nn]]=mm;
+              return(1000+ll*200);
+            }
+            if (ll>0) vv=-GetBestMove(mm1, ll1, kk);
+            else
+            { vv=10*PieceY[0];
+              if (GetFld(PieceX[0]+1,PieceY[0]+1)==-1) 
+              { vv+=5;
+                if (GetFld(PieceX[0]+2,PieceY[0]+1)==-2) vv+=5;
+                if (GetFld(PieceX[0],PieceY[0]+1)==-2) vv+=3;
+              }  
+              if (GetFld(PieceX[0]-1,PieceY[0]+1)==-1)
+              { vv+=5;
+                if (GetFld(PieceX[0],PieceY[0]+1)==-2) vv+=3;
+                if (GetFld(PieceX[0]-2,PieceY[0]+1)==-2) vv+=5;
+              }
+              if (mm>0) vv*=-1;
+            }
+            if (ll==kk)            
+            { xx_min=PieceX[1]<PieceX[2]?PieceX[1]:PieceX[2];
+              if (PieceX[3]<xx_min) xx_min=PieceX[3];
+              if (PieceX[4]<xx_min) xx_min=PieceX[4];
+              xx_max=PieceX[1]>PieceX[2]?PieceX[1]:PieceX[2];
+              if (PieceX[3]>xx_max) xx_max=PieceX[3];
+              if (PieceX[4]>xx_max) xx_max=PieceX[4];
+              yy_min=PieceY[1]<PieceY[2]?PieceY[1]:PieceY[2];
+              if (PieceY[3]<yy_min) yy_min=PieceY[3];
+              if (PieceY[4]<yy_min) yy_min=PieceY[4];
+              yy_max=PieceY[1]>PieceY[2]?PieceY[1]:PieceY[2];
+              if (PieceY[3]>yy_max) yy_max=PieceY[3];
+              if (PieceY[4]>yy_max) yy_max=PieceY[4];
+              if (mm==0)
+              { vv+=Math.abs(2*Size-2-PieceX[1]-PieceX[2]-PieceX[3]-PieceX[4])*4;
+                vv-=(xx_max-xx_min)*5;
+                if (xx_max-xx_min==Size-1) vv+=100;
+                vv+=(yy_max-yy_min)*50;
+              }
+              else
+              { vv-=Math.abs(2*Size-2-PieceX[1]-PieceX[2]-PieceX[3]-PieceX[4])*4;
+                vv+=(xx_max-xx_min);
+                if (xx_max-xx_min==Size-1) vv-=100;
+                if ((PieceX[nn]-PieceX[0]>=4)&&(dd_i==1)) vv-=30;
+                if ((PieceX[nn]-PieceX[0]<=-4)&&(dd_i==-1)) vv-=30;
+                if ((2*PieceX[1]-Size+1)*(2*PieceX[2]-Size+1)*(2*PieceX[3]-Size+1)*(2*PieceX[4]-Size+1)<0) vv-=200;
+                vv-=(yy_max-yy_min)*3;
+              }
+              vv+=Math.floor(Math.random()*3);
+            }
+            if (vv_best<vv)
+            { vv_best=vv;
+              nn_best=nn;
+              ii_best=PieceX[nn];
+              jj_best=PieceY[nn];
+            }
+            Fld[PieceX[nn]][PieceY[nn]]=-1;
+            PieceX[nn]-=dd_i;
+            PieceY[nn]-=dd_j;
+            Fld[PieceX[nn]][PieceY[nn]]=mm;
+          }
+        }
+      }
+    }
+  }
+  N_Sel=nn_best;
+  I_Sel=ii_best;
+  J_Sel=jj_best;
+  return(vv_best);
+}
+
+function OverTest(nn, mmsg)
+{ var ii;
+  IsOver=true;
+  if (nn==0)
+  { for (ii=1; ii<=4; ii++)
+    { if (PieceY[0]<PieceY[ii]) IsOver=false;
+    }
+    if ((mmsg)&&(IsOver)) alert("The fox has won !");
+  }
+  else
+  { if (GetFld(PieceX[0]-1,PieceY[0]-1)==-1) IsOver=false;
+    if (GetFld(PieceX[0]-1,PieceY[0]+1)==-1) IsOver=false;
+    if (GetFld(PieceX[0]+1,PieceY[0]-1)==-1) IsOver=false;
+    if (GetFld(PieceX[0]+1,PieceY[0]+1)==-1) IsOver=false;
+    if ((mmsg)&&(IsOver)) alert("The dogs have won !");
+  }
+  return(IsOver);
+}
+
+function GetFld(nn, mm)
+{ if (nn<0) return(-2);
+  if (nn>=Size) return(-2);
+  if (mm<0) return(-2);
+  if (mm>=Size) return(-2);
+  return(Fld[nn][mm]);
+}
+
+function RefreshPic(ii, jj)
+{ if (IsRotated)
+   window.document.images[Size*Size-1-(Size*jj+ii)].src = Pic[Fld[ii][jj]+1].src;
+  else
+   window.document.images[Size*jj+ii].src = Pic[Fld[ii][jj]+1].src;
+}
+
+function RefreshScreen()
+{ var ii, jj;
+  for (ii=0; ii < Size; ii++)
+  { for (jj=0; jj < Size; jj++)
+      RefreshPic(ii, jj);
+  }
+}
+
+function RotateBoard(rr)
+{ IsRotated=rr;
+  RefreshScreen();
+}
+
+function Help()
+{ alert("The dogs try to catch the fox."+
+      "\nThe fox moves forward and backward"+
+      "\nwhile the dogs can only move forward."+
+      "\nIf moving perfect, the dogs always win."+
+      "\nAs this program doesn't play perfect,"+
+      "\nyou have a good chance also as fox.");
+}
+
+function Resize()
+{ if(navigator.appName == "Netscape") history.go(0);
+}
+</script>
+</head>
+<BODY bgcolor=#aa6644 text=#000000 onResize="javascript:Resize()">
+<DIV ALIGN=center>
+<form name="OptionsForm">
+<table noborder cellpadding=2 cellspacing=2>
+<tr>
+  <td bgcolor=#000000><table border=0 cellpadding=0 cellspacing=1 bgcolor=#000000>
+      <script language="JavaScript">
+      document.open("text/plain");
+      for (j=0; j < Size; j++)
+      { document.writeln("<tr align=center>");
+        for (i=0; i < Size; i++)
+        { if ((i+j)%2==0) document.write("<td bgcolor=#d8bb99>");
+          else document.write("<td bgcolor=#a07860>");
+          document.writeln("<IMG src=\"foxanddogs0.gif\" width=40 height=40 border=1 onMouseDown=\"Clicked("+i+","+j+")\"></td>");
+        }
+        document.writeln("</tr>");
+      }
+      document.close();
+      </script>
+      </table>
+  </td>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td><table border cellpadding=0 cellspacing=0 width="100%">
+        <tr><td rowspan=2 width=45><img src="foxanddogs1.gif" width=40 height=40></td>
+            <td width=95 bgcolor=#DDDDDD><input type=radio name="Fox" checked value="Player" onClick="javascript:SetPlayer(0,true)"><B>Player</B></td></tr>
+        <tr><td bgcolor=#DDDDDD><input type=radio name="Fox" value="Computer" onClick="javascript:SetPlayer(0,false)"><B>Computer</B></td></tr>
+      </table><BR>
+      <table border cellpadding=0 cellspacing=0 width="100%">
+        <tr><td rowspan=2 width=45><img src="foxanddogs2.gif" width=40 height=40></td>
+            <td width=95 bgcolor=#DDDDDD><input type=radio name="Dogs" value="Player" onClick="javascript:SetPlayer(1,true)"><B>Player</B></td></tr>
+        <tr><td bgcolor=#DDDDDD><input type=radio name="Dogs" checked value="Computer" onClick="javascript:SetPlayer(1,false)"><B>Computer</B></td></tr>
+      </table><BR>
+      <table border cellpadding=0 cellspacing=0 width="100%">
+        <tr bgcolor=#DDDDDD><td colspan=2 align=center><B>Who moves first:</B></td></tr>
+        <tr><td width=70><input type=radio name="Start" checked value="Fox" onClick="javascript:SetStart(0)"> <img src="foxanddogs1.gif" width=40 height=40></td>
+            <td width=70><input type=radio name="Start" value="Dogs" onClick="javascript:SetStart(1)"> <img src="foxanddogs2.gif" width=40 height=40></td></tr>
+      </table><BR>
+      <table border=0 cellpadding=0 cellspacing=0 width="100%">
+        <tr><td nowrap><input type=checkbox name="Board" checked onClick="javascript:RotateBoard(this.checked)"><B> rotate board</B></td></tr>
+      </table><BR>
+      <table border=0 cellpadding=0 cellspacing=0 width="100%">
+        <tr><td align=center><input type=button value="&nbsp;New&nbsp;" style="width:70" onClick="javascript:Init()"></td>
+            <td align=center><input type=button value="&nbsp;Help&nbsp;" style="width:70" onClick="javascript:Help()"></td></tr>
+      </table>
+  </td>
+</tr>
+</table>
+</form>
+</DIV>
+<script language="JavaScript">
+  Init();
+  setInterval("Timer()",400);
+</script>
+</BODY>
+</HTML>
